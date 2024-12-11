@@ -40,7 +40,9 @@ createSelectBox();
 recordingButton.addEventListener('click', async () => {
   if (isRecording) {
     mediaRecorder.stop();
-    recordingButton.textContent = 'Start Recording';
+    recordingButton.textContent = 'Start Recording 🎥';
+    recordingButton.classList.remove('stop');
+    recordingButton.classList.add('start');
     isRecording = false;
   } else {
     const selectedSourceId = document.querySelector('select').value;
@@ -65,7 +67,8 @@ recordingButton.addEventListener('click', async () => {
             minWidth: 1280,
             maxWidth: 1280,
             minHeight: 720,
-            maxHeight: 720
+            maxHeight: 720,
+            cursor: 'never' // Hide the cursor from the recording (https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackSettings/cursor)
           }
         }
       });
@@ -81,7 +84,9 @@ recordingButton.addEventListener('click', async () => {
       mediaRecorder.onstop = handleStop;
       mediaRecorder.start();
 
-      recordingButton.textContent = 'Stop Recording';
+      recordingButton.textContent = 'Stop Recording ⏹️';
+      recordingButton.classList.remove('start');
+      recordingButton.classList.add('stop');
       isRecording = true;
     } catch (err) {
       console.error('Error capturing screen:', err);
