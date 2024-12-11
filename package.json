@@ -1,6 +1,6 @@
 {
   "name": "screen-capture-app",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "A screen recording app with cursor smoothing and editing features",
   "main": "main.js",
   "scripts": {

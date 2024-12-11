@@ -3,21 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <title>Screen Capture App</title>
+  <link rel="stylesheet" href="assets/global.css">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="components/editor.css">
+  <link rel="stylesheet" href="components/timeline.css">
+  <link rel="stylesheet" href="components/controls.css">
+  <link rel="stylesheet" href="components/sidebar.css">
 </head>
 <body>
   <h1>Record screen</h1>
-  <button id="recording-button">Start Recording</button>
+  <button id="recording-button" class="start">Start Recording</button>
   <video id="screen-video" autoplay></video>
+  <div id="custom-cursor"></div>
   <div id="editor">
-    <!-- <div id="timeline"></div>
+    <div id="timeline"></div>
     <div id="tools">
       <button id="zoom-tool">Zoom</button>
       <button id="pan-tool">Pan</button>
       <button id="smooth-tool">Smooth Cursor</button>
-    </div> -->
+    </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="lib/recorder.js"></script>
+  <script src="lib/mouseTracker.js"></script>
+  <script src="lib/toolButtons.js"></script>
 </body>
 </html>

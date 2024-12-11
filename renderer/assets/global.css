@@ -1,0 +1,87 @@
+/* Global Styles */
+:root {
+  --primary-color: #1e3a5f;
+  --secondary-color: #dc3545; /* Red color for stop button */
+  --accent-color: #4a90e2;
+  --text-color: #ffffff;
+  --background-color: #121212;
+  --button-hover-color: #3a6ea5;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+h1 {
+  margin-top: 20px;
+  color: var(--text-color);
+}
+
+button {
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  background-color: var(--primary-color);
+  color: var(--text-color);
+}
+
+button.start {
+  background-color: var(--primary-color);
+}
+
+button.start:hover {
+  background-color: var(--button-hover-color);
+}
+
+button.stop {
+  background-color: var(--secondary-color);
+}
+
+button.stop:hover {
+  background-color: var(--button-hover-color);
+}
+
+video {
+  width: 80%;
+  max-width: 800px;
+  margin-top: 20px;
+  border: 2px solid var(--secondary-color);
+  border-radius: 10px;
+  background-color: black;
+}
+
+#editor {
+  margin-top: 20px;
+  width: 80%;
+  max-width: 800px;
+}
+
+#timeline {
+  height: 100px;
+  background-color: var(--secondary-color);
+  border: 1px solid var(--primary-color);
+}
+
+#tools {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#tools button {
+  flex: 1;
+  margin: 0 5px;
+}

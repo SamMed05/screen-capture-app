@@ -10,11 +10,9 @@ const videoElement = document.getElementById('screen-video');
 
 // Initialize the recording button appearance
 recordingButton.textContent = 'Start Recording 🎥';
-recordingButton.style.backgroundColor = '#6c757d'; // Gray background
-recordingButton.style.color = '#fff'; // White text
-recordingButton.style.border = '2px solid #6c757d'; // Gray border
-recordingButton.style.fontSize = '16px'; // Larger font size
-recordingButton.style.padding = '10px 20px'; // Padding for better appearance
+recordingButton.classList.add('start');
+recordingButton.style.backgroundColor = '#6c757d'; // Grey background
+recordingButton.style.border = '2px solid #6c757d'; // Grey border
 
 // Disable the recording button initially
 recordingButton.disabled = true;
@@ -36,10 +34,8 @@ async function createSelectBox() {
   document.body.insertBefore(videoOptionsMenu, videoElement);
   videoOptionsMenu.addEventListener('change', () => {
     recordingButton.disabled = false;
-    recordingButton.textContent = 'Start Recording 🎥';
-    recordingButton.style.backgroundColor = '#28a745'; // Green background
-    recordingButton.style.color = '#fff'; // White text
-    recordingButton.style.border = '2px solid #28a745'; // Green border
+    recordingButton.style.backgroundColor = 'var(--primary-color)'; // Green background
+    recordingButton.style.border = '2px solid var(--primary-color)'; // Green border
   });
 }
 
@@ -49,11 +45,12 @@ createSelectBox();
 recordingButton.addEventListener('click', async () => {
   if (isRecording) {
     mediaRecorder.stop();
+    ipcRenderer.send('stop-recording');
     recordingButton.textContent = 'Start Recording 🎥';
     recordingButton.classList.remove('stop');
     recordingButton.classList.add('start');
-    recordingButton.style.backgroundColor = '#28a745'; // Green background
-    recordingButton.style.border = '2px solid #28a745'; // Green border
+    recordingButton.style.backgroundColor = 'var(--primary-color)'; // Reset to initial color
+    recordingButton.style.border = '2px solid var(--primary-color)'; // Reset to initial border
     isRecording = false;
   } else {
     const selectedSourceId = document.querySelector('select').value;
@@ -95,11 +92,12 @@ recordingButton.addEventListener('click', async () => {
       mediaRecorder.onstop = handleStop;
       mediaRecorder.start();
 
+      ipcRenderer.send('start-recording');
       recordingButton.textContent = 'Stop Recording ⏹️';
       recordingButton.classList.remove('start');
       recordingButton.classList.add('stop');
-      recordingButton.style.backgroundColor = '#dc3545'; // Red background
-      recordingButton.style.border = '2px solid #dc3545'; // Red border
+      recordingButton.style.backgroundColor = 'var(--secondary-color)'; // Red background
+      recordingButton.style.border = '2px solid var(--secondary-color)'; // Red border
       isRecording = true;
     } catch (err) {
       console.error('Error capturing screen:', err);
@@ -137,10 +135,11 @@ function handleStop() {
 
   // Recreate the select box for the next recording
   createSelectBox();
-}
 
-module.exports = {
-  createSelectBox,
-  handleDataAvailable,
-  handleStop
-};
+  // Reset the recording button appearance
+  recordingButton.textContent = 'Start Recording 🎥';
+  recordingButton.classList.remove('stop');
+  recordingButton.classList.add('start');
+  recordingButton.style.backgroundColor = 'var(--primary-color)'; // Reset to initial color
+  recordingButton.style.border = '2px solid var(--primary-color)'; // Reset to initial border
+}
