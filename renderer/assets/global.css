@@ -6,6 +6,16 @@
   --text-color: #ffffff;
   --background-color: #121212;
   --button-hover-color: #3a6ea5;
+  --sidebar-background-color: #1f1f1f;
+  --sidebar-text-color: #ffffff;
+  --button-background-color: #333333;
+  --button-text-color: #ffffff;
+  --button-hover-background-color: #444444;
+  --button-active-background-color: #555555;
+  --timeline-background-color: #1f1f1f;
+  --timeline-text-color: #ffffff;
+  --tabcontent-background-color: #1f1f1f;
+  --tabcontent-text-color: #ffffff;
 }
 
 body {

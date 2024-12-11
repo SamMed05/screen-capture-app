@@ -5,27 +5,75 @@
   <title>Screen Capture App</title>
   <link rel="stylesheet" href="assets/global.css">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="components/editor.css">
-  <link rel="stylesheet" href="components/timeline.css">
-  <link rel="stylesheet" href="components/controls.css">
-  <link rel="stylesheet" href="components/sidebar.css">
 </head>
 <body>
-  <h1>Record screen</h1>
-  <button id="recording-button" class="start">Start Recording</button>
-  <video id="screen-video" autoplay></video>
-  <div id="custom-cursor"></div>
-  <div id="editor">
-    <div id="timeline"></div>
-    <div id="tools">
-      <button id="zoom-tool">Zoom</button>
-      <button id="pan-tool">Pan</button>
-      <button id="smooth-tool">Smooth Cursor</button>
+  <div id="main-container">
+    <div id="sidebar">
+      <div id="Record" class="always-visible">
+        <h2>Record</h2>
+        <button id="recording-button" class="start">Start Recording</button>
+        <select id="video-source-select"></select>
+      </div>
+      <hr>
+      <div class="tab">
+        <button class="tablinks" onclick="openTab(event, 'Animations')">Animations</button>
+        <button class="tablinks" onclick="openTab(event, 'CursorOptions')">Cursor Options</button>
+        <button class="tablinks" onclick="openTab(event, 'VideoAnimations')">Video Animations</button>
+        <button class="tablinks" onclick="openTab(event, 'SplineEditing')">Spline Editing</button>
+      </div>
+      <div id="Animations" class="tabcontent">
+        <h2>Animations</h2>
+        <p>🚧</p>
+      </div>
+      <div id="CursorOptions" class="tabcontent">
+        <h2>Cursor Options</h2>
+        <p>🚧</p>
+      </div>
+      <div id="VideoAnimations" class="tabcontent">
+        <h2>Video Animations</h2>
+        <p>🚧</p>
+      </div>
+      <div id="SplineEditing" class="tabcontent">
+        <h2>Spline Editing</h2>
+        <p>🚧</p>
+      </div>
+    </div>
+    <div id="content">
+      <div id="video-container">
+        <video id="screen-video" autoplay></video>
+        <div id="video-controls">
+          <button id="play-button">Play</button>
+          <button id="pause-button">Pause</button>
+          <button id="start-button">Start</button>
+          <button id="end-button">End</button>
+        </div>
+      </div>
+      <div id="timeline"></div>
     </div>
   </div>
 
   <script src="lib/recorder.js"></script>
   <script src="lib/mouseTracker.js"></script>
   <script src="lib/toolButtons.js"></script>
+  <script>
+    function openTab(evt, tabName) {
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+      document.getElementById(tabName).style.display = "block";
+      evt.currentTarget.className += " active";
+    }
+
+    // Open the default tab
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('.tablinks').click();
+    });
+  </script>
 </body>
 </html>

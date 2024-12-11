@@ -1,4 +1,8 @@
 const { ipcRenderer } = require('electron');
-require('./lib/mouseTracker.js');
-require('./lib/recorder.js');
-require('./lib/toolButtons.js');
+const mouseTracker = require('./lib/mouseTracker.js');
+const recorder = require('./lib/recorder.js');
+const toolButtons = require('./lib/toolButtons.js');
+
+mouseTracker.init(ipcRenderer);
+recorder.init(ipcRenderer);
+toolButtons.init();

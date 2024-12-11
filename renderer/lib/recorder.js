@@ -7,6 +7,7 @@ let mediaStream;
 
 const recordingButton = document.getElementById('recording-button');
 const videoElement = document.getElementById('screen-video');
+const videoSourceSelect = document.getElementById('video-source-select');
 
 // Initialize the recording button appearance
 recordingButton.textContent = 'Start Recording 🎥';
@@ -22,25 +23,63 @@ async function createSelectBox() {
   const inputSources = await ipcRenderer.invoke('get-sources');
 
   // Create a menu to select the screen source
-  const videoOptionsMenu = document.createElement('select');
+  const defaultOption = document.createElement('option');
+  defaultOption.value = '';
+  defaultOption.text = '--- Select video source ---';
+  videoSourceSelect.appendChild(defaultOption);
+
   inputSources.forEach(source => {
     const option = document.createElement('option');
     option.value = source.id;
     option.text = source.name;
-    videoOptionsMenu.appendChild(option);
+    videoSourceSelect.appendChild(option);
   });
 
-  // Append the menu to the body before the video element
-  document.body.insertBefore(videoOptionsMenu, videoElement);
-  videoOptionsMenu.addEventListener('change', () => {
-    recordingButton.disabled = false;
-    recordingButton.style.backgroundColor = 'var(--primary-color)'; // Green background
-    recordingButton.style.border = '2px solid var(--primary-color)'; // Green border
+  videoSourceSelect.addEventListener('change', async () => {
+    const selectedSourceId = videoSourceSelect.value;
+    const isValid = await validateSource(selectedSourceId);
+    if (isValid) {
+      recordingButton.disabled = false;
+      recordingButton.style.backgroundColor = 'var(--primary-color)'; // Green background
+      recordingButton.style.border = '2px solid var(--primary-color)'; // Green border
+    } else {
+      recordingButton.disabled = true;
+      recordingButton.style.backgroundColor = '#6c757d'; // Grey background
+      recordingButton.style.border = '2px solid #6c757d'; // Grey border
+    }
   });
 }
 
+// Function to validate the selected video source
+async function validateSource(sourceId) {
+  if (!sourceId) {
+    return false;
+  }
+  try {
+    const mediaStream = await navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: {
+        mandatory: {
+          chromeMediaSource: 'desktop',
+          chromeMediaSourceId: sourceId,
+          minWidth: 1280,
+          maxWidth: 1280,
+          minHeight: 720,
+          maxHeight: 720,
+          cursor: 'never' // Hide the cursor from the recording
+        }
+      }
+    });
+    mediaStream.getTracks().forEach(track => track.stop());
+    return true;
+  } catch (err) {
+    console.error('Error validating source:', err);
+    return false;
+  }
+}
+
 // Call the function to create the select box on startup
-createSelectBox();
+document.addEventListener('DOMContentLoaded', createSelectBox);
 
 recordingButton.addEventListener('click', async () => {
   if (isRecording) {
@@ -53,7 +92,7 @@ recordingButton.addEventListener('click', async () => {
     recordingButton.style.border = '2px solid var(--primary-color)'; // Reset to initial border
     isRecording = false;
   } else {
-    const selectedSourceId = document.querySelector('select').value;
+    const selectedSourceId = videoSourceSelect.value;
     const inputSources = await ipcRenderer.invoke('get-sources');
     const screenSource = inputSources.find(source => source.id === selectedSourceId);
 
@@ -63,7 +102,7 @@ recordingButton.addEventListener('click', async () => {
     }
 
     // Remove the selection box after a source is selected
-    document.querySelector('select').remove();
+    videoSourceSelect.remove();
 
     try {
       mediaStream = await navigator.mediaDevices.getUserMedia({
@@ -76,7 +115,7 @@ recordingButton.addEventListener('click', async () => {
             maxWidth: 1280,
             minHeight: 720,
             maxHeight: 720,
-            cursor: 'never' // Hide the cursor from the recording (https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackSettings/cursor)
+            cursor: 'never' // Hide the cursor from the recording
           }
         }
       });
@@ -140,6 +179,12 @@ function handleStop() {
   recordingButton.textContent = 'Start Recording 🎥';
   recordingButton.classList.remove('stop');
   recordingButton.classList.add('start');
-  recordingButton.style.backgroundColor = 'var(--primary-color)'; // Reset to initial color
-  recordingButton.style.border = '2px solid var(--primary-color)'; // Reset to initial border
+  recordingButton.style.backgroundColor = '#6c757d'; // Grey background
+  recordingButton.style.border = '2px solid #6c757d'; // Grey border
 }
+
+function init(ipc) {
+  ipcRenderer = ipc;
+}
+
+module.exports = { init };
